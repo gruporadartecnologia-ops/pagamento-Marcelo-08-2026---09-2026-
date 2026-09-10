@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - Marcelo Henrique Lisboa Sodre</title>
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --yellow-main: #FFD600;
+            --yellow-glow: rgba(255, 214, 0, 0.15);
+            --yellow-border: rgba(255, 214, 0, 0.3);
+            --bg-dark: #0A0A0C;
+            --card-bg: #141418;
+            --input-bg: #0A0A0D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --border-subtle: #27272A;
+            --success: #22C55E;
+            --whatsapp-green: #25D366;
+            --whatsapp-glow: rgba(37, 211, 102, 0.2);
+            --danger-main: #EF4444;
+            --danger-glow: rgba(239, 68, 68, 0.15);
+            --danger-border: rgba(239, 68, 68, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 214, 0, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(255, 214, 0, 0.03) 0%, transparent 40%);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 550px;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 30px var(--yellow-glow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FFD600, #FFF59D, #FFD600);
+        }
+
+        .card-header {
+            padding: 32px 24px 20px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .card-header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .card-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .card-body {
+            padding: 0 24px 28px 24px;
+        }
+
+        .client-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .client-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .client-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .invoice-section {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .invoice-section.pending {
+            border-color: var(--yellow-border);
+        }
+
+        .invoice-section.overdue {
+            border-color: var(--danger-border);
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .badge-status.pending {
+            background: rgba(255, 214, 0, 0.1);
+            border: 1px solid var(--yellow-border);
+            color: var(--yellow-main);
+        }
+
+        .badge-status.pending::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--yellow-main);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--yellow-main);
+        }
+
+        .badge-status.overdue {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger-border);
+            color: var(--danger-main);
+        }
+
+        .badge-status.overdue::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--danger-main);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--danger-main);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .info-row .label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .info-row .val-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title svg {
+            fill: var(--yellow-main);
+        }
+
+        .code-group {
+            margin-bottom: 14px;
+        }
+
+        .code-box-mobile {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 10px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.4;
+            resize: none;
+            outline: none;
+            transition: all 0.2s ease;
+            word-break: break-all;
+        }
+
+        .code-box-mobile:focus {
+            border-color: var(--yellow-main);
+            background-color: rgba(255, 214, 0, 0.02);
+        }
+
+        .btn-action {
+            width: 100%;
+            margin-top: 6px;
+            background-color: var(--yellow-main);
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(255, 214, 0, 0.15);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-action:hover, .btn-action:active {
+            background-color: #ffe033;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--yellow-main);
+            border: 1px solid var(--yellow-border);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover, .btn-secondary:active {
+            background-color: rgba(255, 214, 0, 0.08);
+        }
+
+        /* Seção WhatsApp */
+        .negotiation-box {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-subtle);
+            text-align: center;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            background-color: var(--whatsapp-green);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 16px;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 20px var(--whatsapp-glow);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-whatsapp:hover, .btn-whatsapp:active {
+            background-color: #20bd5a;
+            transform: translateY(-1px);
+        }
+
+        .btn-whatsapp-title {
+            font-size: 15px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-whatsapp-subtitle {
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0.95;
+            letter-spacing: -0.1px;
+        }
+
+        .card-footer {
+            padding: 16px 24px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #1E293B;
+            color: #FFF;
+            border: 1px solid var(--success);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <h1>Faturas para Pagamento</h1>
+            <p>Selecione e copie o código desejado abaixo</p>
+        </div>
+
+        <div class="card-body">
+            <!-- Dados do Pagador -->
+            <div class="client-box">
+                <span class="client-label">Cliente</span>
+                <span class="client-name">Marcelo Henrique Lisboa Sodre</span>
+            </div>
+
+            <!-- Fatura 1: A Vencer -->
+            <div class="invoice-section pending">
+                <div class="badge-status pending">🟢 A Vencer</div>
+                <div class="info-row">
+                    <span class="label">Contrato</span>
+                    <span class="val-mono">04082026-152008-6192</span>
+                </div>
+
+                <!-- PIX -->
+                <div class="code-group">
+                    <div class="section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        PIX Copia e Cola
+                    </div>
+                    <textarea class="code-box-mobile" id="pixPending" rows="2" readonly onclick="this.select();">00020101021226960014br.gov.bcb.pix2574api.developer.btgpactual.com/pc/p/v2/cobv/e6f1741cb79c409580d055f8de2bdfb15204000053039865802BR5925V DE A TORRES RADAR COMER6009SAO PAULO62070503***63045EF9</textarea>
+                    <button class="btn-action" onclick="copyCode('pixPending', 'PIX (A vencer)')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copiar Código PIX
+                    </button>
+                </div>
+
+                <!-- Boleto -->
+                <div class="code-group" style="margin-bottom: 0;">
+                    <div class="section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M3 4h2v16H3V4zm4 0h1v16H7V4zm3 0h2v16h-2V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h1v16h-1V4z"/></svg>
+                        Linha Digitável (Boleto)
+                    </div>
+                    <textarea class="code-box-mobile" id="boletoPending" rows="2" readonly onclick="this.select();">20890050091087527210589173292908515650000010999</textarea>
+                    <button class="btn-action btn-secondary" onclick="copyCode('boletoPending', 'Linha Digitável (A vencer)')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copiar Linha Digitável
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fatura 2: Vencida -->
+            <div class="invoice-section overdue">
+                <div class="badge-status overdue">🔴 Em Aberto (Vencida)</div>
+                <div class="info-row">
+                    <span class="label">Contrato</span>
+                    <span class="val-mono">25042026-094706-3539</span>
+                </div>
+
+                <!-- PIX -->
+                <div class="code-group">
+                    <div class="section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        PIX Copia e Cola
+                    </div>
+                    <textarea class="code-box-mobile" id="pixOverdue" rows="2" readonly onclick="this.select();">00020101021226960014br.gov.bcb.pix2574api.developer.btgpactual.com/pc/p/v2/cobv/164ab4454fda4205af142be5b5dc14135204000053039865802BR5925V DE A TORRES RADAR COMER6009SAO PAULO62070503***63045B32</textarea>
+                    <button class="btn-action" onclick="copyCode('pixOverdue', 'PIX (Vencida)')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copiar Código PIX
+                    </button>
+                </div>
+
+                <!-- Boleto -->
+                <div class="code-group" style="margin-bottom: 0;">
+                    <div class="section-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M3 4h2v16H3V4zm4 0h1v16H7V4zm3 0h2v16h-2V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h1v16h-1V4z"/></svg>
+                        Linha Digitável (Boleto)
+                    </div>
+                    <textarea class="code-box-mobile" id="boletoOverdue" rows="2" readonly onclick="this.select();">20890.05009 19196.215875 63173.292903 6 154400000010999</textarea>
+                    <button class="btn-action btn-secondary" onclick="copyCode('boletoOverdue', 'Linha Digitável (Vencida)')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        Copiar Linha Digitável
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chamada WhatsApp Negociação -->
+            <div class="negotiation-box">
+                <a href="https://wa.me/5594992361576?text=Quero%20a%20Negocia%C3%A7%C3%A3o%20para%20Quita%C3%A7%C3%A3o" target="_blank" class="btn-whatsapp">
+                    <span class="btn-whatsapp-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                        Negociação para Quitação
+                    </span>
+                    <span class="btn-whatsapp-subtitle">(10% de desconto/Sem multas e juros, válida apenas até 23:59 do dia de hoje 10/09)</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Ambiente seguro para visualização de pagamento
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span id="toastMsg">Copiado com sucesso!</span>
+    </div>
+
+    <script>
+        function copyCode(id, label) {
+            const textarea = document.getElementById(id);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textarea.value).then(() => {
+                    showToast(`${label} copiado!`);
+                }).catch(() => {
+                    fallbackCopy(textarea, label);
+                });
+            } else {
+                fallbackCopy(textarea, label);
+            }
+        }
+
+        function fallbackCopy(element, label) {
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(`${label} copiado!`);
+                } else {
+                    showToast(`Texto selecionado! Toque em 'Copiar'`);
+                }
+            } catch (err) {
+                showToast(`Texto selecionado! Toque em 'Copiar'`);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
