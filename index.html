@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento - Marcelo Henrique Lisboa Sodre</title>
+    <title>Faturas - Marcelo Henrique Lisboa Sodre</title>
     <!-- Fontes Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,11 +21,13 @@
             --text-muted: #71717A;
             --border-subtle: #27272A;
             --success: #22C55E;
+            --success-glow: rgba(34, 197, 94, 0.15);
+            --success-border: rgba(34, 197, 94, 0.3);
             --whatsapp-green: #25D366;
             --whatsapp-glow: rgba(37, 211, 102, 0.2);
             --danger-main: #EF4444;
-            --danger-glow: rgba(239, 68, 68, 0.15);
-            --danger-border: rgba(239, 68, 68, 0.3);
+            --danger-glow: rgba(239, 68, 68, 0.35);
+            --danger-border: rgba(239, 68, 68, 0.5);
         }
 
         * {
@@ -44,7 +46,7 @@
             align-items: center;
             padding: 20px;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(255, 214, 0, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.08) 0%, transparent 60%),
                 radial-gradient(circle at 80% 80%, rgba(255, 214, 0, 0.03) 0%, transparent 40%);
         }
 
@@ -66,7 +68,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #FFD600, #FFF59D, #FFD600);
+            background: linear-gradient(90deg, #EF4444, #FCA5A5, #EF4444);
         }
 
         .card-header {
@@ -115,64 +117,43 @@
             color: var(--text-primary);
         }
 
-        .invoice-section {
-            background: rgba(255, 255, 255, 0.01);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .invoice-section.pending {
-            border-color: var(--yellow-border);
-        }
-
+        /* Fatura vencida - destaque máximo */
         .invoice-section.overdue {
-            border-color: var(--danger-border);
+            background: rgba(239, 68, 68, 0.05);
+            border: 2px solid var(--danger-border);
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 24px var(--danger-glow);
         }
 
         .badge-status {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 100px;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .badge-status.pending {
-            background: rgba(255, 214, 0, 0.1);
-            border: 1px solid var(--yellow-border);
-            color: var(--yellow-main);
-        }
-
-        .badge-status.pending::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background-color: var(--yellow-main);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--yellow-main);
+            margin-bottom: 14px;
         }
 
         .badge-status.overdue {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.15);
             border: 1px solid var(--danger-border);
             color: var(--danger-main);
+            font-size: 13px;
         }
 
         .badge-status.overdue::before {
             content: '';
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             background-color: var(--danger-main);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--danger-main);
+            box-shadow: 0 0 10px var(--danger-main);
         }
 
         .info-row {
@@ -269,9 +250,60 @@
             background-color: rgba(255, 214, 0, 0.08);
         }
 
+        /* Fatura paga - compacta */
+        .invoice-section.paid {
+            background: rgba(34, 197, 94, 0.04);
+            border: 1px solid var(--success-border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .paid-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .paid-check {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid var(--success-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .paid-text .paid-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .paid-text .paid-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .paid-badge {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         /* Seção WhatsApp */
         .negotiation-box {
-            margin-top: 24px;
+            margin-top: 4px;
             padding-top: 20px;
             border-top: 1px dashed var(--border-subtle);
             text-align: center;
@@ -360,8 +392,8 @@
 
     <div class="card">
         <div class="card-header">
-            <h1>Faturas para Pagamento</h1>
-            <p>Selecione e copie o código desejado abaixo</p>
+            <h1>Fatura em Aberto</h1>
+            <p>Você tem uma fatura vencida pendente de pagamento</p>
         </div>
 
         <div class="card-body">
@@ -371,42 +403,7 @@
                 <span class="client-name">Marcelo Henrique Lisboa Sodre</span>
             </div>
 
-            <!-- Fatura 1: A Vencer -->
-            <div class="invoice-section pending">
-                <div class="badge-status pending">🟢 A Vencer</div>
-                <div class="info-row">
-                    <span class="label">Contrato</span>
-                    <span class="val-mono">04082026-152008-6192</span>
-                </div>
-
-                <!-- PIX -->
-                <div class="code-group">
-                    <div class="section-title">
-                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                        PIX Copia e Cola
-                    </div>
-                    <textarea class="code-box-mobile" id="pixPending" rows="2" readonly onclick="this.select();">00020101021226960014br.gov.bcb.pix2574api.developer.btgpactual.com/pc/p/v2/cobv/e6f1741cb79c409580d055f8de2bdfb15204000053039865802BR5925V DE A TORRES RADAR COMER6009SAO PAULO62070503***63045EF9</textarea>
-                    <button class="btn-action" onclick="copyCode('pixPending', 'PIX (A vencer)')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copiar Código PIX
-                    </button>
-                </div>
-
-                <!-- Boleto -->
-                <div class="code-group" style="margin-bottom: 0;">
-                    <div class="section-title">
-                        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M3 4h2v16H3V4zm4 0h1v16H7V4zm3 0h2v16h-2V4zm4 0h1v16h-1V4zm3 0h2v16h-2V4zm4 0h1v16h-1V4z"/></svg>
-                        Linha Digitável (Boleto)
-                    </div>
-                    <textarea class="code-box-mobile" id="boletoPending" rows="2" readonly onclick="this.select();">20890050091087527210589173292908515650000010999</textarea>
-                    <button class="btn-action btn-secondary" onclick="copyCode('boletoPending', 'Linha Digitável (A vencer)')">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        Copiar Linha Digitável
-                    </button>
-                </div>
-            </div>
-
-            <!-- Fatura 2: Vencida -->
+            <!-- Fatura Vencida - destaque -->
             <div class="invoice-section overdue">
                 <div class="badge-status overdue">🔴 Em Aberto (Vencida)</div>
                 <div class="info-row">
@@ -441,14 +438,28 @@
                 </div>
             </div>
 
+            <!-- Fatura A Vencer - já paga, compacta -->
+            <div class="invoice-section paid">
+                <div class="paid-left">
+                    <div class="paid-check">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <div class="paid-text">
+                        <div class="paid-title">Contrato 04082026-152008-6192</div>
+                        <div class="paid-sub">Fatura já quitada</div>
+                    </div>
+                </div>
+                <span class="paid-badge">Pago</span>
+            </div>
+
             <!-- Chamada WhatsApp Negociação -->
             <div class="negotiation-box">
-                <a href="https://wa.me/5594992361576?text=Quero%20a%20Negocia%C3%A7%C3%A3o%20para%20Quita%C3%A7%C3%A3o" target="_blank" class="btn-whatsapp">
+                <a href="https://wa.me/5594992361576?text=Ol%C3%A1%2C%20preciso%20regularizar%20minha%20fatura" target="_blank" class="btn-whatsapp">
                     <span class="btn-whatsapp-title">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                        Negociação para Quitação
+                        Precisa negociar?
                     </span>
-                    <span class="btn-whatsapp-subtitle">(10% de desconto/Sem multas e juros, válida apenas até 23:59 do dia de hoje 10/09)</span>
+                    <span class="btn-whatsapp-subtitle">Fale com a gente para negociar prazo ou parcelamento</span>
                 </a>
             </div>
         </div>
